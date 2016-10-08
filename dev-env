@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# CONSTANTS
+_REPO_DIR_="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CALL_ORIGIN="$( pwd )"
+
+source $_REPO_DIR_/scripts/initialize.sh
+source $_REPO_DIR_/scripts/preprocessor.sh
+
+if [ $? != 0 ] ; then echo "Terminating...NOW" >&2 ; exit 1 ; fi
+
+# replace long arguments
+args=( )
+str=''
+count=0
+delim=''
+for arg; do
+    if [[ $count -eq 0 ]];then
+        case "$arg" in
+            --help | help)     args+=( -h ) ;;
+            preprocess) args+=( -p ); count=2; delim=''; str='';;
+            init)       args+=( -i ) ;;
+            *)          args+=( "$arg" ) ;;
+        esac
+    else
+        str=$str$delim$arg
+        delim=':'
+        count=$(($count - 1))
+        if [[ $count -eq 0 ]];then args+=( "$str" ); fi
+    fi
+done
+
+set -- "${args[@]}"
+
+while getopts "hsip:" OPTION; do
+    : "$OPTION" "$OPTARG"
+    case $OPTION in
+        h)  echo "usage"; exit 0;;
+        i)  init $CALL_ORIGIN; exit 0;;
+        p)
+            IFS=":" read config tmpl <<< "$OPTARG"
+            preprocess -c $config $tmpl
+        ;;
+        s)  echo "s";;
+        \?) echo $OPTION"  "$OPTARG;;
+    esac
+done

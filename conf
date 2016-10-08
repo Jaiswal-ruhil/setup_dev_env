@@ -1,0 +1,3 @@
+REPO_NAME=.dev_env
+DEFAULT_EXEC=run.sh
+TMPL_LOC=templates

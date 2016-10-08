@@ -9,3 +9,13 @@ create_dir() {
         echo -e "\tdir already exists"
     fi
 }
+
+create_file() {
+    local FILE_NAME=$1
+    if ! [[ -e $FILE_NAME ]]; then
+        cp $_REPO_DIR_/$TMPL_LOC/$DEFAULT_EXEC $FILE_NAME
+        echo -e "\trun file created"
+    else
+        echo -e "\trun file already exists"
+    fi
+}

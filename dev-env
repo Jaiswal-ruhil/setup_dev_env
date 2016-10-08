@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# CONSTANTS
 _REPO_DIR_="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CALL_ORIGIN="$( pwd )"
 
 source $_REPO_DIR_/scripts/initialize.sh
 source $_REPO_DIR_/scripts/preprocessor.sh
+source $_REPO_DIR_/scripts/cmd.sh
+source $_REPO_DIR_/conf
+
 
 if [ $? != 0 ] ; then echo "Terminating...NOW" >&2 ; exit 1 ; fi
 
@@ -17,9 +19,10 @@ delim=''
 for arg; do
     if [[ $count -eq 0 ]];then
         case "$arg" in
-            --help | help)     args+=( -h ) ;;
-            preprocess) args+=( -p ); count=2; delim=''; str='';;
+            exec)       args+=( -e ) count=-1; delim=''; str='';;
             init)       args+=( -i ) ;;
+            preprocess) args+=( -p ); count=2; delim=''; str='';;
+            --help | help)     args+=( -h ) ;;
             *)          args+=( "$arg" ) ;;
         esac
     else
@@ -29,12 +32,15 @@ for arg; do
         if [[ $count -eq 0 ]];then args+=( "$str" ); fi
     fi
 done
+if [[ $count -lt 0 ]];then args+=( "$str" ); fi
+
 
 set -- "${args[@]}"
 
-while getopts "hsip:" OPTION; do
+while getopts :hsip:e: OPTION; do
     : "$OPTION" "$OPTARG"
     case $OPTION in
+        e)  dev_run $OPTARG;;
         h)  echo "usage"; exit 0;;
         i)  init $CALL_ORIGIN; exit 0;;
         p)

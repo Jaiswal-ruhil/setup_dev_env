@@ -17,21 +17,20 @@ if [ $? != 0 ] ; then echo "Terminating...NOW" >&2 ; exit 1 ; fi
 args=( )
 str=''
 count=0
-delim=''
 for arg; do
     if [[ $count -eq 0 ]];then
+         str=''
         case "$arg" in
-            build)      args+=( -D ); count=1; delim=''; str='';;
-            exec)       args+=( -e ); count=-1; delim=''; str='';;
+            build)      args+=( -D ); count=1;;
+            exec)       args+=( -e ); count=-1;;
             init)       args+=( -i ) ;;
-            preprocess) args+=( -p ); count=2; delim=''; str='';;
+            preprocess) args+=( -p ); count=2;;
             test)       args+=( -t );;
             --help | help)     args+=( -h ) ;;
             *)          args+=( "$arg" ) ;;
         esac
     else
-        str=$str$delim$arg
-        delim=':'
+        str=$str" "$arg
         count=$(($count - 1))
         if [[ $count -eq 0 ]];then args+=( "$str" ); fi
     fi
@@ -48,10 +47,7 @@ while getopts :D:e:hip:st OPTION; do
         e)  dev_run $OPTARG;;
         h)  echo "usage"; exit 0;;
         i)  init $CALL_ORIGIN; exit 0;;
-        p)
-            IFS=":" read config tmpl <<< "$OPTARG"
-            preprocess -c $config $tmpl
-        ;;
+        p)  preprocess -c $OPTARG;;
         t)  dev_run -t, exit 0;;
         s)  echo "s";;
         \?) echo $OPTION"  "$OPTARG;;

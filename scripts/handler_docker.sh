@@ -1,7 +1,7 @@
 #!/bin/bash
 
 remove_image() {
-    DOCKER_IMG=$1
+    local DOCKER_IMG=$1
     if [[ $(docker images --format "{{.ID}}" $DOCKER_IMG) ]];then
         echo -e "\tOLDER IMAGE FOUND"
         docker rmi $DOCKER_IMG
@@ -14,7 +14,7 @@ remove_container() {
     # Removes a container
     # input: CONTAINER_NAME
     ####
-    CONTAINER_NAME=$1
+    local CONTAINER_NAME=$1
     if ! [[ -z $(docker ps -a -f "name=${CONTAINER_NAME}" --format "{{.Names}}") ]];then
         echo -e "\tOLDER CONTAINER FOUND"
         docker rm $CONTAINER_NAME
@@ -45,10 +45,10 @@ remove_img_container() {
 }
 
 docker_build_tmpl() {
-    DEV_SRC_DIR=$1
-    DOCKER_TEMPL=$2
-    DOCKER_IMG=$3
-    CONTAINER_NAME=$4
+    local DEV_SRC_DIR=$1
+    local DOCKER_TEMPL=$2
+    local DOCKER_IMG=$3
+    local CONTAINER_NAME=$4
 
     echo "BUILDING DOCKER IMAGE.."
     remove_image $DOCKER_IMG

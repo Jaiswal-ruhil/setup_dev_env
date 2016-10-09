@@ -27,6 +27,7 @@ for arg; do
             preprocess) args+=( -p ); count=2;;
             test)       args+=( -t );;
             --help | help)     args+=( -h ) ;;
+            --remove-container) arg+=( -r ); count=1;;
             *)          args+=( "$arg" ) ;;
         esac
     else
@@ -40,7 +41,7 @@ if [[ $count -lt 0 ]];then args+=( "$str" ); fi
 
 set -- "${args[@]}"
 
-while getopts :D:e:hip:st OPTION; do
+while getopts :D:e:hip:r:st OPTION; do
     : "$OPTION" "$OPTARG"
     case $OPTION in
         D)  docker_build $OPTARG; exit 0;;
@@ -50,6 +51,7 @@ while getopts :D:e:hip:st OPTION; do
         p)  preprocess -c $OPTARG;;
         t)  dev_run -t, exit 0;;
         s)  echo "s";;
+        r)  remove_container $OPTARG;;
         \?) echo $OPTION"  "$OPTARG;;
     esac
 done

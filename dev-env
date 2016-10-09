@@ -5,9 +5,11 @@ CALL_ORIGIN="$( pwd )"
 
 source $_REPO_DIR_/scripts/initialize.sh
 source $_REPO_DIR_/scripts/preprocessor.sh
+source $_REPO_DIR_/scripts/handler_docker.sh
 source $_REPO_DIR_/scripts/cmd.sh
 source $_REPO_DIR_/conf
 
+check_dir $REPO_DIR_NAME
 
 if [ $? != 0 ] ; then echo "Terminating...NOW" >&2 ; exit 1 ; fi
 
@@ -19,7 +21,8 @@ delim=''
 for arg; do
     if [[ $count -eq 0 ]];then
         case "$arg" in
-            exec)       args+=( -e ) count=-1; delim=''; str='';;
+            build)      args+=( -D ); count=1; delim=''; str='';;
+            exec)       args+=( -e ); count=-1; delim=''; str='';;
             init)       args+=( -i ) ;;
             preprocess) args+=( -p ); count=2; delim=''; str='';;
             test)       args+=( -t );;
@@ -38,9 +41,10 @@ if [[ $count -lt 0 ]];then args+=( "$str" ); fi
 
 set -- "${args[@]}"
 
-while getopts :hsip:e:t OPTION; do
+while getopts :D:e:hip:st OPTION; do
     : "$OPTION" "$OPTARG"
     case $OPTION in
+        D)  docker_build $OPTARG; exit 0;;
         e)  dev_run $OPTARG;;
         h)  echo "usage"; exit 0;;
         i)  init $CALL_ORIGIN; exit 0;;

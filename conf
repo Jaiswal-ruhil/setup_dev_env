@@ -1,3 +1,4 @@
-REPO_NAME=.dev_env
+REPO_DIR_NAME=.dev_env
+REPO_CONF_NAME=config
 DEFAULT_EXEC=run.sh
 TMPL_LOC=templates

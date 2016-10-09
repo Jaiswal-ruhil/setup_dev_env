@@ -10,6 +10,14 @@ create_dir() {
     fi
 }
 
+check_dir() {
+    local DIR_NAME=$1
+    if ! [[ -d $DIR_NAME ]]; then
+        echo -e "directory not found: "$DIR_NAME
+        exit 0
+    fi
+}
+
 create_file() {
     local FILE_NAME=$1 MOD=$2
     if ! [[ -e $FILE_NAME ]]; then
@@ -20,5 +28,13 @@ create_file() {
     fi
     if [[ -z $MOD ]]; then
         chmod $MOD $FILE_NAME
+    fi
+}
+
+check_file() {
+    local FILE_NAME=$1
+    if ! [[ -e $FILE_NAME ]]; then
+        echo -e "file not found: "$FILE_NAME
+        exit 0
     fi
 }

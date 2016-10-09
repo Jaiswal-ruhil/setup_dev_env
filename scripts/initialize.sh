@@ -8,6 +8,6 @@ init() {
     local init_repo_dir=$(pwd)
     create_dir $init_repo_dir/$REPO_NAME
     git_init $init_repo_dir/$REPO_NAME
-    create_file $init_repo_dir/$DEFAULT_EXEC
+    create_file $init_repo_dir/$REPO_NAME/$DEFAULT_EXEC
     echo "[DONE]"
 }

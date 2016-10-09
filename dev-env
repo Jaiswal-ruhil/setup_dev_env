@@ -22,6 +22,7 @@ for arg; do
             exec)       args+=( -e ) count=-1; delim=''; str='';;
             init)       args+=( -i ) ;;
             preprocess) args+=( -p ); count=2; delim=''; str='';;
+            test)       args+=( -t );;
             --help | help)     args+=( -h ) ;;
             *)          args+=( "$arg" ) ;;
         esac
@@ -37,7 +38,7 @@ if [[ $count -lt 0 ]];then args+=( "$str" ); fi
 
 set -- "${args[@]}"
 
-while getopts :hsip:e: OPTION; do
+while getopts :hsip:e:t OPTION; do
     : "$OPTION" "$OPTARG"
     case $OPTION in
         e)  dev_run $OPTARG;;
@@ -47,6 +48,7 @@ while getopts :hsip:e: OPTION; do
             IFS=":" read config tmpl <<< "$OPTARG"
             preprocess -c $config $tmpl
         ;;
+        t)  dev_run -t, exit 0;;
         s)  echo "s";;
         \?) echo $OPTION"  "$OPTARG;;
     esac

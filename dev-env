@@ -19,16 +19,17 @@ str=''
 count=0
 for arg; do
     if [[ $count -eq 0 ]];then
-         str=''
+        str=''
         case "$arg" in
+            # predifined set of commands
             build)      args+=( -D ); count=1;;
-            exec)       args+=( -e ); count=-1;;
             init)       args+=( -i ) ;;
             preprocess) args+=( -p ); count=2;;
             test)       args+=( -t );;
-            --help | help)     args+=( -h ) ;;
-            --remove-container) arg+=( -r ); count=1;;
-            *)          args+=( "$arg" ) ;;
+            help)       args+=( -h ) ;;
+            rm-container) args+=( -r ); count=1;;
+            # self aware (aware of the repo config) commands
+            *)  args+=( -e ); str=$arg; count=-1;;
         esac
     else
         str=$str" "$arg
@@ -37,7 +38,6 @@ for arg; do
     fi
 done
 if [[ $count -lt 0 ]];then args+=( "$str" ); fi
-
 
 set -- "${args[@]}"
 

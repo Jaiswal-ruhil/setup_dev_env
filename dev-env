@@ -49,7 +49,7 @@ while getopts :D:e:hip:r:st OPTION; do
         h)  echo "usage"; exit 0;;
         i)  init $CALL_ORIGIN; exit 0;;
         p)  preprocess -c $OPTARG;;
-        t)  dev_run -t, exit 0;;
+        t)  dev_run -t; exit 0;;
         s)  echo "s";;
         r)  remove_container $OPTARG;;
         \?) echo $OPTION"  "$OPTARG;;

@@ -1,17 +1,17 @@
 #!/bin/bash
 
 replace() {
-    OLD=$1
-    NEW=$2
-    INP_FILE=$3
+    local OLD=$1
+    local NEW=$2
+    local INP_FILE=$3
     OLD="$(echo $OLD | sed 's/\//\\\//g')"
     NEW="$(echo $NEW | sed 's/\//\\\//g')"
     sed -i -- 's/{{'$OLD'}}/'$NEW'/g' $INP_FILE
 }
 
 preprocess() {
-    FILE=${@: -1}
-    OUTPUT_FILE="$(echo $FILE | sed 's/.tmpl//g')"
+    local FILE=${@: -1}
+    local OUTPUT_FILE="$(echo $FILE | sed 's/.tmpl//g')"
     cp $FILE $OUTPUT_FILE
     local OPTIND opt a
     while getopts :r:c:h opt; do

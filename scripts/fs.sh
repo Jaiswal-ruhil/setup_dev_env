@@ -19,15 +19,17 @@ check_dir() {
 }
 
 create_file() {
-    local FILE_NAME=$1 MOD=$2
+    local OUTPUT_FOLDER=$1
+    local FILE_NAME=$2
+    local MOD=$3
     if ! [[ -e $FILE_NAME ]]; then
-        cp $_REPO_DIR_/$TMPL_LOC/$DEFAULT_EXEC $FILE_NAME
-        echo -e "\trun file created"
+        cp $_REPO_DIR_/$TMPL_LOC/$FILE_NAME $OUTPUT_FOLDER/$FILE_NAME
+        echo -e "\t$FILE_NAME file created"
     else
-        echo -e "\trun file already exists"
+        echo -e "\t$FILE_NAME file already exists"
     fi
-    if [[ -z $MOD ]]; then
-        chmod $MOD $FILE_NAME
+    if ! [[ -z $MOD ]]; then
+        chmod $MOD $OUTPUT_FOLDER/$FILE_NAME
     fi
 }
 

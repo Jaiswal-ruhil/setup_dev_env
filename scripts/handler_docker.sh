@@ -2,6 +2,7 @@
 
 remove_image() {
     local DOCKER_IMG=$1
+    remove_img_container -i $DOCKER_IMG
     if [[ $(docker images --format "{{.ID}}" $DOCKER_IMG) ]];then
         echo -e "\tOLDER IMAGE FOUND"
         docker rmi $DOCKER_IMG
@@ -64,12 +65,10 @@ docker_build() {
     ####
     ## CONSTANTS
     local CONF_FILE=$CALL_ORIGIN/$REPO_DIR_NAME/$REPO_CONF_NAME
-    local DOCKER_TMPL=$CALL_ORIGIN/$REPO_DIR_NAME/Dockerfile.tmpl
+    local DOCKER_TMPL=$CALL_ORIGIN/$REPO_DIR_NAME/$DEFAULT_DOCKERFILE
     local DOCKER_FILE_LOCATION=$CALL_ORIGIN/$REPO_DIR_NAME
     check_file $CONF_FILE $DOCKER_TEMPL
     local DOCKER_IMG=$( load_config $1 )
-
-    echo $CONF_FILE $DOCKER_TMPL
     preprocess -c $CONF_FILE $DOCKER_TMPL
     echo "BUILDING DOCKER IMAGE.."
     remove_image $DOCKER_IMG

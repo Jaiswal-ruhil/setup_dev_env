@@ -22,7 +22,7 @@ create_file() {
     local OUTPUT_FOLDER=$1
     local FILE_NAME=$2
     local MOD=$3
-    if ! [[ -e $FILE_NAME ]]; then
+    if ! [[ -e $OUTPUT_FOLDER/$FILE_NAME ]]; then
         cp $_REPO_DIR_/$TMPL_LOC/$FILE_NAME $OUTPUT_FOLDER/$FILE_NAME
         echo -e "\t$FILE_NAME file created"
     else

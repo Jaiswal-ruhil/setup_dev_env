@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./.dev_env/config
+
 _REPO_DIR_="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CALL_ORIGIN="$( pwd )"
 

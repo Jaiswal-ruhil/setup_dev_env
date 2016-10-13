@@ -5,10 +5,11 @@ source $_REPO_DIR_/scripts/handler_git.sh
 
 init() {
     echo "INITIALIZING DEV ENV"
-    local init_repo_dir=$(pwd)
+    local init_repo_dir=$CALL_ORIGIN
+    echo $init_repo_dir
     create_dir $init_repo_dir/$REPO_DIR_NAME
     git_init $init_repo_dir/$REPO_DIR_NAME
-    create_file $init_repo_dir/$REPO_DIR_NAME/$DEFAULT_EXEC
+    create_file $init_repo_dir/$REPO_DIR_NAME/$DEFAULT_EXEC +x
     echo "[DONE]"
 }
 

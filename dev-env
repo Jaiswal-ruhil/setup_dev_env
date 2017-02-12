@@ -3,13 +3,18 @@
 _REPO_DIR_="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CALL_ORIGIN="$( pwd )"
 
+# loading essential scripts
 source $_REPO_DIR_/scripts/initialize.sh
 source $_REPO_DIR_/scripts/preprocessor.sh
 source $_REPO_DIR_/scripts/handler_docker.sh
+source $_REPO_DIR_/scripts/set_env.sh
 source $_REPO_DIR_/scripts/cmd.sh
 source $_REPO_DIR_/conf
 
+setup_exec_env $CALL_ORIGIN/.dev_env
+
 if [ $? != 0 ] ; then echo "Terminating...NOW" >&2 ; exit 1 ; fi
+
 
 # replace long arguments
 args=( )
@@ -22,15 +27,25 @@ for arg; do
         case "$arg" in
             # predifined set of commands
             build)      args+=( -D ); count=1;;
+            # list contents of file in .dev_env folder
             cat)        args+=( -c ); delim=''; count=-1;;
-            help)       args+=( -h ) ;;
+            help|-h|--help)
+                        echo "usage";
+                        exit 0
+            ;;
             init)       args+=( -i ); count=-1;;
             ls)        args+=( -l ); delim=''; count=-1;;
             preprocess) check_dir $REPO_DIR_NAME; args+=( -p ); count=2;;
             rm-container) check_dir $REPO_DIR_NAME; args+=( -r ); count=1;;
-            test)       args+=( -t );;
-            # self aware (aware of the repo config) commands
-            *) check_dir $REPO_DIR_NAME; args+=( -e ); str=$arg; count=-1;;
+            # self aware (repo config) commands
+            --*=*)  flag=`sed "s/--//g" <<< $arg`
+                    flag_val=`sed 's/\(\a*\)=\(\a*\)/\1\ \2/' <<< $flag`
+                    exec_flag $flag_val
+            ;;
+            --*)    flag=`sed "s/--//g" <<< $arg`
+                    exec_flag $flag
+            ;;
+            *) echo "command not found";;
         esac
     else
         str=$str$delim$arg
@@ -42,13 +57,11 @@ if [[ $count -lt 0 ]];then args+=( "$str" ); fi
 
 set -- "${args[@]}"
 
-while getopts :c:D:e:hi:l:p:r:st OPTION; do
+while getopts :c:D:i:l:p:r:st OPTION; do
     : "$OPTION" "$OPTARG"
     case $OPTION in
         c)  cat $CALL_ORIGIN/.dev_env/$OPTARG; exit 0;;
         D)  docker_build $OPTARG; exit 0;;
-        e)  dev_run $OPTARG;;
-        h)  echo "usage"; exit 0;;
         i)  init $CALL_ORIGIN $OPTARG; exit 0;;
         l)  ls $CALL_ORIGIN/.dev_env/; exit 0;;
         p)  preprocess -c $OPTARG;;

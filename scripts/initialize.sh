@@ -7,6 +7,7 @@ init() {
     echo "INITIALIZING DEV ENV"
     local init_repo_dir=$CALL_ORIGIN
     create_dir $init_repo_dir/$REPO_DIR_NAME
+    create_dir $init_repo_dir/$REPO_DIR_NAME/$FLAGS_FOLDER_NAME
     git_init $init_repo_dir
     create_file $init_repo_dir/$REPO_DIR_NAME/ $DEFAULT_EXEC +x
     for arg; do

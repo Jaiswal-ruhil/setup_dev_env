@@ -5,3 +5,9 @@ dev_run() {
     IFS=':' read -r -a array <<< "$CMD_STR"
     bash -c "$CALL_ORIGIN/$REPO_DIR_NAME/$DEFAULT_EXEC ""${array[@]}"
 }
+
+exec_flag() {
+    local FLAG=$1
+    local VALUE=$2
+    bash $CALL_ORIGIN/$REPO_DIR_NAME/$FLAGS_FOLDER_NAME/$FLAG.sh $VALUE
+}

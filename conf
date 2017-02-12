@@ -1,7 +1,7 @@
 REPO_DIR_NAME=.dev_env
 REPO_CONF_NAME=config
 DEFAULT_EXEC=run.sh
+FLAGS_FOLDER_NAME=flags
 TMPL_LOC=templates
 DEFAULT_DOCKERFILE=Dockerfile.tmpl
 DOCKER_TMPL_LOC=/home/ruhil/project-dev-env/Dockerfiles
-

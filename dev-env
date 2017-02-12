@@ -9,7 +9,6 @@ source $_REPO_DIR_/scripts/handler_docker.sh
 source $_REPO_DIR_/scripts/cmd.sh
 source $_REPO_DIR_/conf
 
-
 if [ $? != 0 ] ; then echo "Terminating...NOW" >&2 ; exit 1 ; fi
 
 # replace long arguments

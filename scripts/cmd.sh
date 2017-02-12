@@ -11,3 +11,9 @@ exec_flag() {
     local VALUE=$2
     bash $CALL_ORIGIN/$REPO_DIR_NAME/$FLAGS_FOLDER_NAME/$FLAG.sh $VALUE
 }
+
+exec_cmd() {
+    local CMD=$1
+    local VALUE="${@:2}"
+    bash $_REPO_DIR_/$CMD_FOLDER_NAME/$CMD.sh $CALL_ORIGIN $VALUE
+}

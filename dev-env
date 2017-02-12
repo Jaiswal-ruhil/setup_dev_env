@@ -28,13 +28,11 @@ for arg; do
             # predifined set of commands
             build)      args+=( -D ); count=1;;
             # list contents of file in .dev_env folder
-            cat)        args+=( -c ); delim=''; count=-1;;
             help|-h|--help)
                         echo "usage";
                         exit 0
             ;;
             init)       args+=( -i ); count=-1;;
-            ls)        args+=( -l ); delim=''; count=-1;;
             preprocess) check_dir $REPO_DIR_NAME; args+=( -p ); count=2;;
             rm-container) check_dir $REPO_DIR_NAME; args+=( -r ); count=1;;
             # self aware (repo config) commands
@@ -45,7 +43,9 @@ for arg; do
             --*)    flag=`sed "s/--//g" <<< $arg`
                     exec_flag $flag
             ;;
-            *) echo "command not found";;
+            *)      exec_cmd $arg $@
+                    exit 0
+            ;;
         esac
     else
         str=$str$delim$arg
@@ -57,16 +57,13 @@ if [[ $count -lt 0 ]];then args+=( "$str" ); fi
 
 set -- "${args[@]}"
 
-while getopts :c:D:i:l:p:r:st OPTION; do
+while getopts :D:i:p:r:t OPTION; do
     : "$OPTION" "$OPTARG"
     case $OPTION in
-        c)  cat $CALL_ORIGIN/.dev_env/$OPTARG; exit 0;;
         D)  docker_build $OPTARG; exit 0;;
         i)  init $CALL_ORIGIN $OPTARG; exit 0;;
-        l)  ls $CALL_ORIGIN/.dev_env/; exit 0;;
         p)  preprocess -c $OPTARG;;
         t)  dev_run -t, exit 0;;
-        s)  echo "s";;
         r)  remove_container $OPTARG;;
         \?) echo $OPTION"  "$OPTARG;;
     esac

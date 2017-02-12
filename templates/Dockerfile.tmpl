@@ -1,0 +1,13 @@
+# {{IMG_NAME}}
+# Build using: docker build -t {{IMG}} --rm=true --no-cache .
+#
+# NAME             {{IMG_NAME}}
+# VERSION          {{IMG_VERSION}}
+# LAST_UPDATED     {{UPDATE_DATE}} {{UPDATE_TIME}}
+
+FROM  ubuntu
+MAINTAINER Ruhil Jaiswal "ruhiljaiswal@gmail.com"
+
+
+RUN apt-get update
+RUN apt-get upgrade -y

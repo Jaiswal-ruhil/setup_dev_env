@@ -1,0 +1,41 @@
+#!/bin/bash
+
+. ./.dev_env/config
+. ./.dev_env/handler_docker.sh
+
+while getopts :o:dDr opt; do
+    case $opt in
+        D)
+            # build docker image
+            cd $DEV_SRC_DIR
+            ./fetch_extract.sh http://download.redis.io/redis-stable.tar.gz
+            ./preprocessor.sh -c config $DOCKER_TEMPL
+            docker_build_tmpl $DEV_SRC_DIR $DOCKER_TEMPL $DOCKER_IMG $CONTAINER_NAME
+        ;;
+        d)
+            cd $DEV_SRC_DIR
+            echo "DOCKER CONTAINER STARTING..."
+            remove_container $CONTAINER_NAME
+            docker run --name $CONTAINER_NAME -it \
+                    -p $HOST_PORT_GEN_ADS:$PORT_GEN_ADS \
+                    -p $HOST_PORT_REDIS:$PORT_REDIS \
+                    -v $REPO_DIR:$MOUNT_DIR \
+                    -v $SRC_DIR_REDIS:$MOUNT_DIR_REDIS \
+                    -v $SRC_DIR_REDIS_DATA:$MOUNT_DIR_REDIS_DATA \
+                    $DOCKER_IMG /bin/bash;
+            echo "...DOCKER CONTAINER CLOSED"
+        ;;
+        r)
+            redis-server --protected-mode no &
+            python $MOUNT_DIR/generate/generate_ads.py
+            grunt -t $MOUNT_DIR/gruntfile_addng.js &
+            cd $MOUNT_DIR/static/web/
+            python -m SimpleHTTPServer 80 &
+            cd $MOUNT_DIR
+            bash
+        ;;
+        \?)
+            echo "Invalid option: $OPTARG" >&2
+        ;;
+    esac
+done

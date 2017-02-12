@@ -1,0 +1,7 @@
+FLAG=>-h | --help
+DESC=>Shows help options
+CODE=>echo hi
+
+FLAG=>-r | --run
+DESC=>basic test
+CODE=>echo run

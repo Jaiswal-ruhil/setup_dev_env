@@ -11,7 +11,9 @@ source $_REPO_DIR_/scripts/set_env.sh
 source $_REPO_DIR_/scripts/cmd.sh
 source $_REPO_DIR_/conf
 
-setup_exec_env $CALL_ORIGIN/.dev_env
+if [ -d $CALL_ORIGIN/.dev_env ]; then
+    setup_exec_env $CALL_ORIGIN/.dev_env
+fi
 
 if [ $? != 0 ] ; then echo "Terminating...NOW" >&2 ; exit 1 ; fi
 

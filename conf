@@ -6,4 +6,4 @@ CMD_FOLDER_NAME=scripts/cmds
 TMPL_LOC=templates
 DEFAULT_DOCKERFILE=Dockerfile.tmpl
 DOCKER_TMPL_LOC=/home/ruhil/project-dev-env/Dockerfiles
-REPO_VERSION=2.0.0
+REPO_VERSION=2.1.3

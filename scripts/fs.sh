@@ -37,6 +37,7 @@ check_file() {
     local FILE_NAME=$1
     if ! [[ -e $FILE_NAME ]]; then
         echo -e "file not found: "$FILE_NAME
-        exit 0
+        echo 1
     fi
+    echo 0
 }

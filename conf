@@ -1,5 +1,6 @@
 REPO_DIR_NAME=.dev_env
 REPO_CONF_NAME=config
+REPO_DOCKER_TMPL_DIR=.dev_env/Dockerfiles
 DEFAULT_EXEC=run.sh
 FLAGS_FOLDER_NAME=flags
 CMD_FOLDER_NAME=scripts/cmds

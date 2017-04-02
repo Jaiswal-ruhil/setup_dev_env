@@ -37,7 +37,16 @@ check_file() {
     local FILE_NAME=$1
     if ! [[ -e $FILE_NAME ]]; then
         echo -e "file not found: "$FILE_NAME
-        echo 1
     fi
-    echo 0
+}
+
+_file_stat_Modified() {
+    local _FILE=$1
+    echo `stat --format %y ${_FILE}`
+}
+
+file_stat() {
+    local _STAT=$1
+    local _FILE=$2
+    echo `_file_stat_${_STAT} ${_FILE}`
 }

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+_REPO_DIR_="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CALL_ORIGIN="$( pwd )"
+
+# loading essential scripts
+source $_REPO_DIR_/scripts/initialize.sh
+source $_REPO_DIR_/scripts/preprocessor.sh
+source $_REPO_DIR_/scripts/handler_docker.sh
+source $_REPO_DIR_/scripts/set_env.sh
+source $_REPO_DIR_/scripts/cmd.sh
+source $_REPO_DIR_/conf
+
+if [ -d $CALL_ORIGIN/.dev_env ]; then
+    setup_exec_env $CALL_ORIGIN/.dev_env
+fi
+
+CMD=$1
+ARGS="${@:2}"
+${CMD} "$ARGS"

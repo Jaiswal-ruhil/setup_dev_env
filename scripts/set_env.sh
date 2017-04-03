@@ -34,7 +34,9 @@ _prepare_conf() {
     grep -e '^[A-Za-z_0-9]*=[^:]*:[^:]*$' $_dev_folder/$GLOBAL_CONF | while read -r line ; do
         local _key=$(echo $line | sed s/=.*//g)
         local _value=$(echo $line | sed s/.*://g)
-        file_append $_conf "${_key}=${_value}"
+        if ! [[ $( grep -e "^${_key}=${_value}$" $_conf ) ]]; then
+            file_append $_conf "${_key}=${_value}"
+        fi
     done
 }
 

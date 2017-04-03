@@ -24,9 +24,9 @@ create_file() {
     local MOD=$3
     if ! [[ -e $OUTPUT_FOLDER/$FILE_NAME ]]; then
         cp $_REPO_DIR_/$TMPL_LOC/$FILE_NAME $OUTPUT_FOLDER/$FILE_NAME
-        echo -e "\t$FILE_NAME file created"
+        INFO "\t$FILE_NAME file created"
     else
-        echo -e "\t$FILE_NAME file already exists"
+        INFO "\t$FILE_NAME file already exists"
     fi
     if ! [[ -z $MOD ]]; then
         chmod $MOD $OUTPUT_FOLDER/$FILE_NAME
@@ -36,13 +36,26 @@ create_file() {
 check_file() {
     local FILE_NAME=$1
     if ! [[ -e $FILE_NAME ]]; then
-        echo -e "file not found: "$FILE_NAME
+        INFO "file not found: "$FILE_NAME
     fi
 }
 
 _file_stat_Modified() {
     local _FILE=$1
     echo `stat --format %y ${_FILE}`
+}
+
+_file_stat_Exists() {
+    local _FILE=$1
+    if [[ -e $FILE_NAME ]]; then echo 1; fi
+}
+
+file_append() {
+    local _file=$1
+    local _content=$2
+    echo $_file
+    echo $_content
+    echo "${_content}" >>$_file
 }
 
 file_stat() {

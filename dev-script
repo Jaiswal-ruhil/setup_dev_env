@@ -12,7 +12,7 @@ source $_REPO_DIR_/scripts/cmd.sh
 source $_REPO_DIR_/conf
 
 if [ -d $CALL_ORIGIN/.dev_env ]; then
-    setup_exec_env $CALL_ORIGIN/.dev_env
+  setup_exec_env $CALL_ORIGIN/.dev_env
 fi
 
 CMD=$1

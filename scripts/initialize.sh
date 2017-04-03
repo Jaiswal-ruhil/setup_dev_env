@@ -4,20 +4,18 @@ source $_REPO_DIR_/scripts/fs.sh
 source $_REPO_DIR_/scripts/handler_git.sh
 
 init() {
-    echo "INITIALIZING DEV ENV"
+    INFO "INITIALIZING DEV ENV"
     local init_repo_dir=$CALL_ORIGIN
     create_dir $init_repo_dir/$REPO_DIR_NAME
     create_dir $init_repo_dir/$REPO_DIR_NAME/$FLAGS_FOLDER_NAME
+    create_file $init_repo_dir/$REPO_DIR_NAME/ $GLOBAL_CONF
     git_init $init_repo_dir
-    create_file $init_repo_dir/$REPO_DIR_NAME/ $DEFAULT_EXEC +x
     for arg; do
         case "$arg" in
             --Dockerfile) create_file_from $init_repo_dir/$REPO_DIR_NAME/ $DOCKER_TMPL_REPO/$DEFAULT_DOCKERFILE;;
         esac
     done
-    # so to make an suitable config file
-    create_file $init_repo_dir/$REPO_DIR_NAME/ $REPO_CONF_NAME
-    echo "[DONE]"
+    INFO "[DONE]"
 }
 
 load_config() {

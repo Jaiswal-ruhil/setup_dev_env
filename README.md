@@ -27,6 +27,6 @@ dev-env --<flagname>
             |- flags
                 |- <flagname>.sh
             |- Dockerfiles
-                |- <imagename>.sh
+                |- <imagename>.tmpl
 
 ```

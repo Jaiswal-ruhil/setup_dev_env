@@ -136,12 +136,37 @@ run_container() {
     remove_image "${_IMG_NAME}:${_OLD_TAG}"
     docker run $_CMD
     elif [[ `docker ps -f "ID=${_CONTAINER_ID}" --format "{{.Names}}"` ]]; then # CONTAINERS exists
-    echo "Container already running"
+    INFO "Container already running"
     elif [[ $_CONTAINER_ID ]]; then                                             # CONTAINERS exists
-    echo -e "old container found\n"
+    INFO "old container found"
     docker start -ai $_CONTAINER_ID
   else                                                                          # start an new container
-    echo -e "INFO: starting a new container found"
+    INFO "starting a new container found"
+    docker run $_CMD
+  fi
+}
+
+# #############################################################################
+# Runs the container with given config
+# input: similar docker run command with --img=<IMG_NAME>:<TAG> [..options]
+# #############################################################################
+run_global_container() {
+  local _INPUT=$*
+  local _IMG_FLAG=`str_match "${_INPUT}" "--img=[^\ ]*"`
+  local _IMG_NAME_TAG=`str_replace ${_IMG_FLAG} --img= ""`
+
+  local _IMG_DATE=`img_stat Created ${_IMG_NAME_TAG}`
+  local _CMD=`str_replace "${_INPUT}" "${_IMG_FLAG}" "${_IMG_NAME_TAG}"`
+
+  local _CONTAINER_ID=`img_stat ContainerID ${_IMG_NAME_TAG}`
+
+  if [[ `docker ps -f "ID=${_CONTAINER_ID}" --format "{{.Names}}"` ]]; then     # CONTAINERS exists
+    INFO "Container already running"
+    elif [[ $_CONTAINER_ID ]]; then                                             # CONTAINERS exists
+    INFO "old container found"
+    docker start -ai $_CONTAINER_ID
+  else                                                                          # start an new container
+    INFO "starting a new container found"
     docker run $_CMD
   fi
 }

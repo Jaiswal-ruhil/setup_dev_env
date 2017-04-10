@@ -151,13 +151,13 @@ run_container() {
 # input: similar docker run command with --img=<IMG_NAME>:<TAG> [..options]
 # #############################################################################
 run_global_container() {
+  LOG "run_global_container: $*"
   local _INPUT=$*
   local _IMG_FLAG=`str_match "${_INPUT}" "--img=[^\ ]*"`
   local _IMG_NAME_TAG=`str_replace ${_IMG_FLAG} --img= ""`
 
   local _IMG_DATE=`img_stat Created ${_IMG_NAME_TAG}`
-  local _CMD=`str_replace "${_INPUT}" "${_IMG_FLAG}" "${_IMG_NAME_TAG}"`
-
+  local _CMD=`str_replace "${_INPUT}" --img= ""`
   local _CONTAINER_ID=`img_stat ContainerID ${_IMG_NAME_TAG}`
 
   if [[ `docker ps -f "ID=${_CONTAINER_ID}" --format "{{.Names}}"` ]]; then     # CONTAINERS exists

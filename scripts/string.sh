@@ -1,6 +1,7 @@
 #!/bin/bash
 
 str_replace() {
+  # TODO: HANDLE '/' in the old and new values
   local INP_STR=$1
   local OLD=$2
   local NEW=$3
@@ -16,6 +17,10 @@ str_match() {
 
 INFO() {
   printf "INFO: $*\n"
+}
+
+LOG() {
+  printf "LOG: $*\n"
 }
 
 MSG() {

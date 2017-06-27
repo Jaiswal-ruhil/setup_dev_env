@@ -179,7 +179,7 @@ run_container() {
 # input: similar docker run command with --name=<CTRN_NAME> [..options]
 # #############################################################################
 run_global_container() {
-    # LOG "run_global_container: $*"
+    LOG "run_global_container: $*"
     local _INPUT=$*
     local _CTRN_FLAG=`str_match "${_INPUT}" "--name=[^\ ]*"`
     local _CTRN_NAME=`str_replace ${_CTRN_FLAG} --name= ""`
@@ -217,20 +217,31 @@ run_global_container() {
 run_global_container_daemon() {
     LOG "run_global_container: $*"
     local _INPUT=$*
-    local _IMG_FLAG=`str_match "${_INPUT}" "--img=[^\ ]*"`
-    local _IMG_NAME_TAG=`str_replace ${_IMG_FLAG} --img= ""`
+    local _CTRN_FLAG=`str_match "${_INPUT}" "--name=[^\ ]*"`
+    local _CTRN_NAME=`str_replace ${_CTRN_FLAG} --name= ""`
+    local _CMD=`str_replace "${_INPUT}" "--name=" "--name "`
+    local _CONTAINER_ID=`ctrn_stat ContainerID ${_CTRN_NAME}`
 
-    local _IMG_DATE=`img_stat Created ${_IMG_NAME_TAG}`
-    local _CMD=`str_replace "${_INPUT}" --img= ""`
-    local _CONTAINER_ID=`img_stat ContainerID ${_IMG_NAME_TAG}`
-
-    if [[ `docker ps -f "ID=${_CONTAINER_ID}" --format "{{.Names}}"` ]]; then     # CONTAINERS exists
-        INFO "Container already running"
-        elif [[ $_CONTAINER_ID ]]; then                                             # CONTAINERS exists
-        INFO "old container found"
-        docker start $_CONTAINER_ID
-    else                                                                          # start an new container
-        INFO "starting a new container"
+    if [[ $_CONTAINER_ID ]]; then                                               # CONTAINERS exists
+        INFO "old container found $ContainerID"
+        if [[ `docker ps --filter "ID=${_CONTAINER_ID}" --format "{{.ID}}"` ]]; then     # CONTAINERS already running
+            INFO "Container already running"
+        else
+            local _IMG_NAME_TAG=`ctrn_stat Image ${_CONTAINER_ID}`
+            local _IMG_DATE=`img_stat Epoch ${_IMG_NAME_TAG}`
+            local _CTRN_DATE=`ctrn_stat Epoch ${_CONTAINER_ID}`
+            if [[ $_IMG_DATE -gt $_CTRN_DATE ]]; then
+                INFO "Container Follows Old Image: Destroying container"
+                docker rm $_CONTAINER_ID
+                INFO "Starting a new container"
+                docker run $_CMD
+            else
+                INFO "Starting old container"
+                docker start $_CONTAINER_ID
+            fi
+        fi
+    else                                                                        # start an new container
+        INFO "Starting a new container"
         docker run $_CMD
     fi
 }

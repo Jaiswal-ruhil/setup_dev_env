@@ -71,7 +71,6 @@ docker_build() {
     local DOCKER_IMG=$( load_config $1 )
     preprocess -c $CONF_FILE $DOCKER_TMPL
     echo "BUILDING DOCKER IMAGE.."
-    remove_image $DOCKER_IMG
     docker build --tag=$DOCKER_IMG --rm=true $DOCKER_FILE_LOCATION
     echo -e "\tIMAGE BUILT"
     remove_img_container -i $DOCKER_IMG

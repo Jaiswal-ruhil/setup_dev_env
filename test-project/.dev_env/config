@@ -1,0 +1,10 @@
+IMG=dev-env-test:0.2.0
+IMG_NAME=dev-env-test
+IMG_VERSION=0.2.0
+BIN_PATH=/home/ruhil/Dropbox/projects/setup_dev_env
+BIN_PATH_CONTAINER=/dev_env
+REPO_PATH=/home/ruhil/Dropbox/projects/setup_dev_env/test-project
+REPO_PATH_CONTAINER=/proj
+CONFIG_CONTENT=some_content
+CONTAINER_NAME=devenvtest
+some_content=haha

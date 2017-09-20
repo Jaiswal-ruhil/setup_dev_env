@@ -1,0 +1,14 @@
+# {{IMG}}
+# Build using: docker build -t "{{IMG}}" --rm=true --no-cache .
+#
+# NAME             {{IMG_NAME}}
+# VERSION          {{IMG_VERSION}}
+
+FROM  ubuntu
+
+RUN apt update
+RUN apt upgrade -y
+ENV PATH {{BIN_PATH_CONTAINER}}:$PATH
+
+
+WORKDIR {{REPO_PATH_CONTAINER}}

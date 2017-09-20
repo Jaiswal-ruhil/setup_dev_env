@@ -10,8 +10,8 @@ replace() {
 }
 
 preprocess() {
-    local FILE=${@: -1}
-    local OUTPUT_FILE="$(echo $FILE | sed 's/.tmpl//g')"
+    local FILE=${@:$#-1:1} # resolve the issue of last 2 elemnts
+    local OUTPUT_FILE=${@: -1}
     cp $FILE $OUTPUT_FILE
     local OPTIND opt a
     while getopts :r:c:h opt; do

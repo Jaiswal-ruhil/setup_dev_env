@@ -9,7 +9,11 @@ dev_run() {
 exec_flag() {
     local FLAG=$1
     local VALUE=$2
-    bash $CALL_ORIGIN/$REPO_DIR_NAME/$FLAGS_FOLDER_NAME/$FLAG.sh $VALUE
+    if [[ -e $_REPO_DIR_/scripts/flags/$FLAG.sh  ]]; then
+        bash $_REPO_DIR_/scripts/flags/$FLAG.sh $_REPO_DIR_ $VALUE
+    else
+        bash $CALL_ORIGIN/$REPO_DIR_NAME/$FLAGS_FOLDER_NAME/$FLAG.sh $VALUE
+    fi
 }
 
 exec_cmd() {

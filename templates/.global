@@ -1,0 +1,8 @@
+# #############################################################################
+# key="description"[:default]
+# example
+#   NAME="name of the project"
+#   VER="version of the project":0.0.1
+#
+# *shared file across the development
+# #############################################################################
